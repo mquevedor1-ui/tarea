@@ -1,0 +1,85 @@
+import javax.swing.*
+import java.awt.*
+
+class CalculadoraGUI : JFrame() {
+
+    private val display = JTextField()
+
+    private var num1 = 0.0
+    private var operador = ""
+
+    init {
+        title = "Calculadora"
+        setSize(300, 400)
+        defaultCloseOperation = EXIT_ON_CLOSE
+        layout = BorderLayout()
+
+        display.font = Font("Arial", Font.BOLD, 24)
+        display.isEditable = false
+        display.horizontalAlignment = JTextField.RIGHT
+        add(display, BorderLayout.NORTH)
+
+        val panel = JPanel()
+        panel.layout = GridLayout(5, 4, 5, 5)
+
+        val botones = arrayOf(
+            "7","8","9","/",
+            "4","5","6","*",
+            "1","2","3","-",
+            "0","C","=","+"
+        )
+
+        for (texto in botones) {
+            val btn = JButton(texto)
+            btn.font = Font("Arial", Font.BOLD, 16)
+
+            btn.addActionListener { evento(texto) }
+
+            panel.add(btn)
+        }
+
+        add(panel, BorderLayout.CENTER)
+    }
+
+    private fun evento(texto: String) {
+
+        when (texto) {
+
+            "0","1","2","3","4","5","6","7","8","9" -> {
+                display.text += texto
+            }
+
+            "+","-","*","/" -> {
+                num1 = display.text.toDoubleOrNull() ?: 0.0
+                operador = texto
+                display.text = ""
+            }
+
+            "=" -> {
+                val num2 = display.text.toDoubleOrNull() ?: 0.0
+                var resultado = 0.0
+
+                when (operador) {
+                    "+" -> resultado = num1 + num2
+                    "-" -> resultado = num1 - num2
+                    "*" -> resultado = num1 * num2
+                    "/" -> {
+                        if (num2 == 0.0) {
+                            JOptionPane.showMessageDialog(this, "No dividir entre 0")
+                            return
+                        }
+                        resultado = num1 / num2
+                    }
+                }
+
+                display.text = resultado.toString()
+            }
+
+            "C" -> {
+                display.text = ""
+                num1 = 0.0
+                operador = ""
+            }
+        }
+    }
+}
