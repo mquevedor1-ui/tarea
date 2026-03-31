@@ -1,0 +1,75 @@
+import javax.swing.*
+import java.awt.*
+import java.awt.event.ActionListener
+import kotlin.random.Random
+
+class ClimaGUI : JFrame() {
+
+    private val txtCiudad = JTextField()
+    private val btnConsultar = JButton("Consultar Clima")
+
+    private val lblCiudad = JLabel("Ciudad: ")
+    private val lblTemp = JLabel("Temperatura: ")
+    private val lblEstado = JLabel("Estado: ")
+
+    private val panelPrincipal = JPanel()
+
+    init {
+        title = "App Clima Pro"
+        setSize(400, 300)
+        defaultCloseOperation = EXIT_ON_CLOSE
+        setLocationRelativeTo(null)
+
+        panelPrincipal.layout = null
+        panelPrincipal.background = Color(230, 240, 255)
+        add(panelPrincipal)
+
+        val titulo = JLabel("Control del Clima")
+        titulo.setFont(Font("Arial", Font.BOLD, 20))
+        titulo.setBounds(100, 10, 200, 30)
+        panelPrincipal.add(titulo)
+
+        panelPrincipal.add(JLabel("Ciudad:")).setBounds(30, 60, 100, 20)
+        txtCiudad.setBounds(120, 60, 200, 25)
+        panelPrincipal.add(txtCiudad)
+
+        btnConsultar.setBounds(120, 100, 150, 30)
+        panelPrincipal.add(btnConsultar)
+
+        lblCiudad.setBounds(30, 150, 300, 20)
+        lblTemp.setBounds(30, 180, 300, 20)
+        lblEstado.setBounds(30, 210, 300, 20)
+
+        panelPrincipal.add(lblCiudad)
+        panelPrincipal.add(lblTemp)
+        panelPrincipal.add(lblEstado)
+
+        btnConsultar.addActionListener {
+            consultarClima()
+        }
+    }
+
+    private fun consultarClima() {
+        val ciudad = txtCiudad.text
+
+        if (ciudad.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingresa una ciudad")
+            return
+        }
+
+        val temperatura = Random.nextInt(10, 35)
+        val estados = listOf("Soleado", "Nublado", "Lluvioso")
+        val estado = estados.random()
+
+        lblCiudad.text = "Ciudad: $ciudad"
+        lblTemp.text = "Temperatura: $temperatura °C"
+        lblEstado.text = "Estado: $estado"
+
+        // Cambiar color según clima
+        when (estado) {
+            "Soleado" -> panelPrincipal.background = Color(255, 223, 100)
+            "Nublado" -> panelPrincipal.background = Color(200, 200, 200)
+            "Lluvioso" -> panelPrincipal.background = Color(150, 180, 255)
+        }
+    }
+}
